@@ -1,0 +1,113 @@
+﻿@page "{id}"
+@model BoardGameCompany.Pages.InventoryItems.EditModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<br />
+<div class="container row p-0 m-0">
+    <div class="col-9">
+        <h2 class="text-info">Edit Inventoy Item</h2>
+    </div>
+</div>
+<br />
+
+<div class="border container" style="padding:30px;">
+    <form method="post">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <input type="hidden" value="@Model.InventoryItem.ID" />
+        <div class="form-group row">
+            <div class="col-4">
+                Board Game
+            </div>
+            <div class="col-6">
+                <select class="form-select form-control"
+                        aria-label="Default select example"
+                        asp-for="InventoryItem.BoardGameID">
+                    <option value="" selected>Select Board Game</option>
+                    @foreach (var item in Model.BoardGames)
+                    {
+                        <option value="@item.ID">@item.Title</option>
+                    }
+                </select>
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="InventoryItem.BoardGameID" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="InventoryItem.InStock"></label>
+            </div>
+            <div class="col-6">
+                <div class="text-center">
+                    <input type="checkbox" asp-for="InventoryItem.InStock" class="form-check-input" style="width:25px; height:25px;" />
+
+                    <div class="invalid-feedback" style="display:block;">
+                        <span asp-validation-for="InventoryItem.InStock" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="InventoryItem.ReceivedDate"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="InventoryItem.ReceivedDate" class="form-control" />
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="InventoryItem.ReceivedDate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="InventoryItem.ShippedDate"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="InventoryItem.ShippedDate" class="form-control" />
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="InventoryItem.ShippedDate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="InventoryItem.Condition"></label>
+            </div>
+            <div class="col-6">
+
+                <select class="form-select form-control"
+                        aria-label="Default select example"
+                        asp-for="InventoryItem.Condition">
+                    <option value="" selected>Select Condition</option>
+                    <option value="New">New</option>
+                    <option value="Used">Used</option>
+                </select>
+
+
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="InventoryItem.Condition" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3 offset-4">
+                <input type="submit" value="Edit" class="btn btn-primary form-control" />
+            </div>
+            <div class="col-3">
+                <a asp-page="Index" class="btn btn-success form-control">Back to List</a>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

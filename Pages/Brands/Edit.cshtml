@@ -1,0 +1,39 @@
+﻿@page "{id}"
+@model BoardGameCompany.Pages.Brands.EditModel
+@{
+    ViewData["Title"] = "Edit Brand";
+}
+
+<br />
+<div class="container row p-0 m-0">
+    <div class="col-9">
+        <h2 class="text-info">Update Brand</h2>
+    </div>
+</div>
+<br />
+
+<div class="border container" style="padding:30px;">
+    <form method="post">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <input type="hidden" asp-for="Brand.ID" />
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Brand.BrandName"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Brand.BrandName" class="form-control" />
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="Brand.BrandName" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3 offset-4">
+                <input type="submit" value="Create" class="btn btn-primary form-control" />
+            </div>
+            <div class="col-3">
+                <a asp-page="Index" class="btn btn-success form-control">Back to List</a>
+            </div>
+        </div>
+    </form>
+</div>

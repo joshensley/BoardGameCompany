@@ -1,0 +1,84 @@
+﻿@page "{orderId}"
+@model BoardGameCompany.Pages.CheckOut.ConfirmationPageModel
+@{
+    ViewData["Title"] = "Confirmation";
+}
+
+<h1>Thank you for your order!</h1>
+<h1>Order ID# @Html.DisplayFor(m => m.UserOrderInformation[0].OrderInformationGroupID)</h1>
+
+
+@if (Model.UserOrderInformation.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Your Items</th>
+                <th scope="col" class="text-center">@Html.DisplayNameFor(m => m.UserOrderInformation[0].Quantity)</th>
+                <th scope="col" class="text-right">@Html.DisplayNameFor(m => m.UserOrderInformation[0].TotalPrice)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.UserOrderInformation)
+            {
+                <tr>
+                    <td>
+                        <div class="row">
+                            <div class="col-3">
+                                <img src="@item.BoardGame.BoardGameImageFilePath" alt="board game" width="50" />
+                            </div>
+                            <div class="col-9">
+                                <div class="row">
+                                    @Html.DisplayFor(m => item.BoardGame.Brand.BrandName)
+                                </div>
+                                <div class="row">
+                                    @Html.DisplayFor(m => item.BoardGame.Title)
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(m => item.Quantity)
+                    </td>
+                    <td class="text-right">
+                        $@Html.DisplayFor(m => item.TotalPrice)
+                    </td>
+                </tr>
+
+            }
+
+            <tr>
+                <td colspan="4">
+                    <div class="row">
+                        <div class="col-6"><strong>Subtotal:</strong></div>
+                        <div class="col-6 text-right">$@Model.UserOrderInformationPrice.Subtotal</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div class="row">
+                        <div class="col-6"><strong>Shipping:</strong></div>
+                        <div class="col-6 text-right">$@Model.UserOrderInformationPrice.Shipping</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div class="row">
+                        <div class="col-6"><strong>Tax:</strong></div>
+                        <div class="col-6 text-right">$@Model.UserOrderInformationPrice.Tax</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div class="row">
+                        <div class="col-6"><strong>Grand Total:</strong></div>
+                        <div class="col-6 text-right"><strong>$@Model.UserOrderInformationPrice.GrandTotal</strong></div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}

@@ -1,0 +1,126 @@
+﻿@page
+@model BoardGameCompany.Pages.BoardGames.CreateModel
+@{
+    ViewData["Title"] = "Create Board Game";
+}
+
+<br />
+<div class="container row p-0 m-0">
+    <div class="col-9">
+        <h2 class="text-info">Create Board Game</h2>
+    </div>
+</div>
+<br />
+
+<div class="border container" style="padding:30px;">
+    <form method="post" enctype="multipart/form-data">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="BoardGame.UPC"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="BoardGame.UPC" class="form-control" />
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="BoardGame.UPC" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="BoardGame.Title"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="BoardGame.Title" class="form-control" />
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="BoardGame.Title" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="BoardGame.Description"></label>
+            </div>
+            <div class="col-6">
+                <textarea asp-for="BoardGame.Description" class="form-control"></textarea>
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="BoardGame.Description" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="BoardGame.PlayerNumber"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="BoardGame.PlayerNumber" class="form-control" min="1" max="20" />
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="BoardGame.PlayerNumber" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="BoardGame.ReleaseDate"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="BoardGame.ReleaseDate" class="form-control" />
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="BoardGame.ReleaseDate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="BoardGame.Price"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="BoardGame.Price" class="form-control" />
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="BoardGame.Price" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label>Brand</label>
+            </div>
+            <div class="col-6">
+                <select class="form-select form-control"
+                        aria-label="Default select example"
+                        asp-for="BoardGame.BrandID">
+                    <option value="" selected>Select Brand</option>
+                    @foreach (var item in Model.Brands)
+                    {
+                        <option value="@(item.ID)">@item.BrandName</option>
+                    }
+                </select>
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="BoardGame.BrandID" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label>Image</label>
+            </div>
+            <div class="col-6">
+                <label class="btn btn-primary">
+                    Browse <input type="file" asp-for="Upload" hidden/>
+                </label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3 offset-4">
+                <input type="submit" value="Create" class="btn btn-primary form-control" />
+            </div>
+            <div class="col-3">
+                <a asp-page="Index" class="btn btn-success form-control">Back to List</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{ 
+    <partial name="_ValidationScriptsPartial" />
+}

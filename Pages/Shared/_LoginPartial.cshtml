@@ -1,0 +1,82 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using BoardGameCompany.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext _db
+
+@{ 
+    var itemsInCart = 0;
+    @if (User.Identity.IsAuthenticated)
+    {
+        var userId = (await UserManager.GetUserAsync(User)).Id;
+
+        itemsInCart = (_db.UserCart
+            .Where(u => u.ApplicationUserId == userId)).Count();
+    }
+
+}
+
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item mt-2">
+            <img src="@((await UserManager.GetUserAsync(User)).UserAvatarFilePath)"
+                 alt="avatar"
+                 style="width:30px; border-radius:50%;" />
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link text-light"
+               asp-area="Identity"
+               asp-page="/Account/Manage/Index"
+               title="Manage">
+                @((await UserManager.GetUserAsync(User)).Name.Split(" ")[0])
+            </a>
+        </li>
+
+
+        <li class="nav-item">
+            <a class="nav-link text-light"
+               asp-area=""
+               asp-page="/UserCartList/Index">
+                <i class="fas fa-shopping-cart"></i>
+                <span class='badge badge-warning' id='lblCartCount'>@itemsInCart</span>
+            </a>
+        </li>
+
+        <li class="nav-item dropdown">
+
+            <a class="nav-link text-light" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li class="nav-item">
+                    <form class="form-inline"
+                          asp-area="Identity"
+                          asp-page="/Account/Logout"
+                          asp-route-returnUrl="@Url.Page("/", new { area = "" })"
+                          method="post">
+                        <button type="submit" class="nav-link btn btn-link text-dark">
+                            Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+</ul>
+
+@section Scripts {
+    <link href="~/css/cart.css" rel="stylesheet" type="text/css" />
+}

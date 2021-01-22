@@ -1,0 +1,83 @@
+﻿@page
+@model BoardGameCompany.Pages.CheckOut.EditShippingInformationModel
+@{
+    ViewData["Title"] = "Shipping";
+}
+
+<div class="border container" style="padding:30px;">
+    <form method="post">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <input type="hidden" asp-for="UserShippingInformation.ApplicationUserId" />
+        <div class="form-group row">
+            <div class="offset-3 col-6">
+                <strong><label asp-for="UserShippingInformation.Name"></label></strong>
+                <input asp-for="UserShippingInformation.Name" class="form-control" placeholder="First and Last Name" />
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="UserShippingInformation.Name" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-3 col-6">
+                <label asp-for="UserShippingInformation.Address1"></label>
+                <input asp-for="UserShippingInformation.Address1" class="form-control" placeholder="Street address or P.O. Box" />
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="UserShippingInformation.Address1" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-3 col-6">
+                <label asp-for="UserShippingInformation.Address2"></label>
+                <input asp-for="UserShippingInformation.Address2" class="form-control" placeholder="Apt, suite, unit, building, floor, etc." />
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="UserShippingInformation.Address2" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-3 col-6">
+                <label asp-for="UserShippingInformation.City"></label>
+                <input asp-for="UserShippingInformation.City" class="form-control" />
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="UserShippingInformation.City" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-3 col-6">
+                <label asp-for="UserShippingInformation.State"></label>
+                <input asp-for="UserShippingInformation.State" class="form-control" />
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="UserShippingInformation.State" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-3 col-6">
+                <label asp-for="UserShippingInformation.PostalCode"></label>
+                <input asp-for="UserShippingInformation.PostalCode" class="form-control" />
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="UserShippingInformation.PostalCode" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-3 col-6">
+                <label asp-for="UserShippingInformation.Country"></label>
+                <input asp-for="UserShippingInformation.Country" class="form-control" />
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="UserShippingInformation.Country" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-3 col-4">
+                <input type="submit"
+                       value="Edit"
+                       class="btn btn-primary form-control"
+                       asp-route-id="@Model.UserShippingInformation.ID" />
+            </div>
+        </div>
+    </form>
+</div>

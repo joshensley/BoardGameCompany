@@ -1,0 +1,292 @@
+﻿@page "{id}"
+@model BoardGameCompany.Pages.StoreFront.IndexModel
+@{
+    ViewData["Title"] = Model.BoardGame.Title;
+}
+
+<div class="row">
+    <br />
+    <div class="offset-xl-1 col-xl-5 offset-lg-1 col-lg-5 col-md-12 col-12 col-sm-12 col-xs-12">
+        <div style="text-align:center;" class="img-hover-zoom text-center">
+            <img src="@Model.BoardGame.BoardGameImageFilePath"
+                 alt="@Model.BoardGame.Title"
+                 width="300" />
+        </div>
+    </div>
+    <div class="offset-xl-1 col-xl-5 offset-lg-1 col-lg-5 col-md-12 col-12 col-sm-12 col-xs-12">
+        <br />
+        <h5 class="text-center text-xl-left">
+            @Html.DisplayNameFor(m => m.BoardGame.Brand.BrandName): @Html.DisplayFor(m => m.BoardGame.Brand.BrandName)
+        </h5>
+        <h3 class="text-center text-xl-left">
+            @Html.DisplayFor(m => m.BoardGame.Title)
+        </h3>
+        <h3 class="text-center text-xl-left">
+            $@Html.DisplayFor(m => m.BoardGame.Price)
+        </h3>
+
+        <div class="row">
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                @if (Model.BoardGame.InventoryItems.Count == 0)
+                {
+                    <div class="col-12">
+                        <a asp-page="" class="btn btn-block btn-danger disabled"><i class="fas fa-times-circle"></i> Out of Stock</a>
+                    </div>
+                }
+                else if (Model.UserCartList.Count > 0)
+                {
+                    <div class="col-12">
+                        <a asp-page="/UserCartList/Index" class="btn btn-block btn-success"><i class="fas fa-check"></i> In Cart</a>
+                    </div>
+                }
+                else
+                {
+                    <form method="post">
+                        <div class="row">
+                            <div class="col-12 mb-1">
+                                <input type="hidden" asp-for="UserCart.BoardGameID" value="@Model.BoardGame.ID" />
+                                <input type="hidden" asp-for="UserCart.ApplicationUserId" value="@Model.UserId" />
+                                <input type="text" asp-for="UserCart.Quantity" placeholder="Enter Quantity" class="form-control text-center" />
+                            </div>
+
+                            <div class="col-12">
+                                <input type="submit"
+                                       asp-page-handler="cart"
+                                       asp-route-price="@Model.BoardGame.Price"
+                                       asp-route-boardGameId="@Model.BoardGame.ID"
+                                       class="btn btn-primary form-control"
+                                       value="Add to Cart" />
+                            </div>
+                            @if (Model.ErrorMessage != null)
+                            {
+                                <div class="col-12 mt-2 text-center">
+                                    <p class="text-danger">@Model.ErrorMessage</p>
+                                </div>
+                            }
+                        </div>
+                    </form>
+                }
+            }
+            else
+            {
+                <div class="col-12 mb-1">
+                    <a asp-page="" class="btn btn-block btn-success disabled">Add to Cart</a>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="text-center">
+                            Want to purchase? <a asp-area="Identity" asp-page="/Account/Login">Sign-in</a>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+        <br />
+
+        <dl class="row">
+            <dt class="col-3">
+                @Html.DisplayNameFor(m => m.BoardGame.UPC)
+            </dt>
+            <dd class="col-9">
+                @Html.DisplayFor(m => m.BoardGame.UPC)
+            </dd>
+            <dt class="col-3">
+                @Html.DisplayNameFor(m => m.BoardGame.Title)
+            </dt>
+            <dd class="col-9">
+                @Html.DisplayFor(m => m.BoardGame.Title)
+            </dd>
+            <dt class="col-3">
+                @Html.DisplayNameFor(m => m.BoardGame.ReleaseDate)
+            </dt>
+            <dd class="col-9">
+                @Html.DisplayFor(m => m.BoardGame.ReleaseDate)
+            </dd>
+            <dt class="col-3">
+                @Html.DisplayNameFor(m => m.BoardGame.PlayerNumber)
+            </dt>
+            <dd class="col-9">
+                @Html.DisplayFor(m => m.BoardGame.PlayerNumber)
+            </dd>
+            <dt class="col-3">
+                Stock
+            </dt>
+            <dd class="col-9">
+                @Html.DisplayFor(m => m.BoardGame.InventoryItems.Count)
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<h4>@Html.DisplayNameFor(m => m.BoardGame.Description)</h4>
+<hr />
+<p>@Html.DisplayFor(m => m.BoardGame.Description)</p>
+
+<hr />
+<br />
+
+<h4>Reviews</h4>
+<hr />
+
+@if (User.Identity.IsAuthenticated && Model.UserHasReview == false)
+{
+    <form method="post">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
+        <input type="hidden" asp-for="UserComment.UserBoardGameCommentDate" value="@DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd"))" />
+        <input type="hidden" asp-for="UserComment.UserIdBoardGameComment" value="@Model.UserId" />
+        <input type="hidden" asp-for="UserComment.BoardGameID" value="@Model.BoardGame.ID" />
+        <div class="form-group">
+            <div class="mb-3">
+                <textarea class="form-control disabled"
+                          id="reviewBoardGame"
+                          rows="3"
+                          placeholder="Write a review..."
+                          asp-for="UserComment.UserBoardGameComment"></textarea>
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="UserComment.UserBoardGameComment" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group text-right">
+            <input type="submit"
+                   class="btn btn-primary"
+                   asp-route-id="@Model.BoardGame.ID" />
+        </div>
+    </form>
+}
+else if (Model.UserHasReview == true)
+{
+    <p>
+        You already have a review.&nbsp;
+        <a asp-page="./Review/Edit"
+           asp-route-boardGameId="@Model.BoardGame.ID"
+           asp-route-userId="@Model.UserId"
+           asp-route-commentId="@Model.UserCommentId">
+            Edit your review.
+        </a>
+    </p>
+}
+else
+{
+    <div class="text-left">
+        Want to write a review? <a asp-area="Identity" asp-page="/Account/Login">Sign-in</a>
+    </div>
+}
+
+
+
+<br />
+<div class="row justify-content-center">
+    @foreach (var item in Model.UserComments)
+    {
+        <div class="col-md-6 col-sm-12 col-12">
+            <div class="card w-100 mb-4">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-1 mr-4">
+                                            <img src="@item.UserAvatarFilePath" alt="avatar" style="border-radius:50%;" width="50" />
+                                        </div>
+                                        <div class="col-8">
+
+                                            <h5 class="card-title">@item.Name</h5>
+                                            <h6 class="card-subtitle mb-2 text-muted">@item.CommentDate</h6>
+                                        </div>
+                                        @if (User.Identity.IsAuthenticated && item.Id == Model.UserId)
+                                        {
+                                            <div class="col-1 text-right mr-2">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-secondary" style="border-radius:50%;" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fas fa-bars"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <li>
+                                                            <a asp-page="./Review/Edit"
+                                                               asp-route-boardGameId="@Model.BoardGame.ID"
+                                                               asp-route-userId="@Model.UserId"
+                                                               asp-route-commentId="@Model.UserCommentId"
+                                                               class="dropdown-item">
+                                                                Edit
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a asp-page="./Review/Delete"
+                                                               asp-route-boardGameId="@Model.BoardGame.ID"
+                                                               asp-route-userId="@Model.UserId"
+                                                               asp-route-commentId="@Model.UserCommentId"
+                                                               class="dropdown-item">
+                                                                Delete
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <p class="card-text">@item.UserComment</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+
+
+@{
+    var prevDisabled = !Model.UserComments.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.UserComments.HasNextPage ? "disabled" : "";
+}
+
+@if (Model.UserComments.Count > 0)
+{
+    <div class="row">
+        <div class="col-6 mt-2">
+            <a asp-page="./Index"
+               asp-route-id="@Model.BoardGame.ID"
+               asp-route-pageIndex="@(Model.UserComments.PageIndex - 1)"
+               class="btn btn-primary @prevDisabled">
+                Previous
+            </a>
+            <a asp-page="./Index"
+               asp-route-id="@Model.BoardGame.ID"
+               asp-route-pageIndex="@(Model.UserComments.PageIndex + 1)"
+               class="btn btn-primary @nextDisabled">
+                Next
+            </a>
+        </div>
+        <div class="col-6">
+            <p class="text-right">Page @Model.UserComments.PageIndex of @Model.UserComments.TotalPages</p>
+        </div>
+    </div>
+}
+else
+{
+    <p class="text-center">No reviews yet</p>
+}
+
+
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <link href="~/css/details.css" rel="stylesheet" type="text/css" />
+}

@@ -1,0 +1,83 @@
+﻿@page
+@model BoardGameCompany.Pages.OrderHistory.IndexModel
+@{
+    ViewData["Title"] = "Order History";
+}
+
+<br />
+<h1>Order History</h1>
+<br />
+
+@if (Model.UserOrderInformation.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" class="text-center">Order ID</th>
+                <th scope="col" class="text-center">@Html.DisplayNameFor(m => m.UserOrderInformation[0].OrderDate)</th>
+                <th scope="col" class="text-center">@Html.DisplayNameFor(m => m.UserOrderInformation[0].Quantity)</th>
+                <th scope="col" class="text-center">Item</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.UserOrderInformation)
+            {
+                <tr>
+                    <td class="text-center">
+                        <a asp-page="../CheckOut/ConfirmationPage" asp-route-orderId="@(item.OrderInformationGroupID)">
+                            @Html.DisplayFor(m => item.OrderInformationGroupID)
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(m => item.OrderDate)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(m => item.Quantity)
+                    </td>
+                    <td class="text-center">
+                        <div class="row">
+                            <div class="col-3">
+                                <img src="@item.BoardGame.BoardGameImageFilePath" alt="board game" width="50" />
+                            </div>
+                            <div class="col-9">
+                                <div class="row">
+                                    @Html.DisplayFor(m => item.BoardGame.Brand.BrandName)
+                                </div>
+                                <div class="row">
+                                    @Html.DisplayFor(m => item.BoardGame.Title)
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No order history</p>
+}
+
+@{
+    var prevDisabled = !Model.UserOrderInformation.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.UserOrderInformation.HasNextPage ? "disabled" : "";
+}
+
+<div class="col-6">
+    <a asp-page="./Index"
+       asp-route-pageIndex="@(Model.UserOrderInformation.PageIndex - 1)"
+       class="btn btn-primary @prevDisabled">
+        Previous
+    </a>
+    <a asp-page="./Index"
+       asp-route-pageIndex="@(Model.UserOrderInformation.PageIndex + 1)"
+       class="btn btn-primary @nextDisabled">
+        Next
+    </a>
+</div>
+
+<div class="col-12">
+    <p class="text-center">Page @Model.UserOrderInformation.PageIndex of @Model.UserOrderInformation.TotalPages</p>
+</div>

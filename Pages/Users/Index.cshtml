@@ -1,0 +1,117 @@
+﻿@page
+@model BoardGameCompany.Pages.Users.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+  
+<br /><br />
+<div class="row">
+    <div class="col-6">
+        <h2 class="text-info">Customers List</h2>
+    </div>
+    <div class="col-6 text-right">
+        <a asp-page="/Account/Register" asp-area="Identity" class="btn btn-info">
+            <i class="fas fa-plus"></i>&nbsp; Create New Customer
+        </a>
+    </div>
+</div>
+<div class="border backgroundWhite">
+    <form asp-page="./Index" method="get">
+        <div class="form-action no-color p-1 m-1">
+            <p>
+                <div class="row">
+                    <div class="col-6">
+                        <input type="text"
+                               name="SearchString"
+                               value="@Model.CurrentFilter"
+                               placeholder="Find Name..."
+                               class="form-control" />
+                    </div>
+                    <div class="col-6">
+                        <input type="submit" value="Search" class="btn btn-primary" />
+                        <a asp-page="./Index" class="btn btn-danger">Clear</a>
+                    </div>
+                </div>
+            </p>
+        </div>
+    </form>
+
+        <div>
+            <table class="table table-striped border">
+                <tr class="table-secondary">
+                    <th>
+                        <a asp-page="./Index" asp-route-sortOrder="@Model.NameSort" asp-route-currentFilter="@Model.CurrentFilter">
+                            @Html.DisplayNameFor(m => m.ApplicationUserList[0].Name)
+                        </a>
+                    </th>
+                    <th>
+                        <a asp-for="./Index" asp-route-sortOrder="@Model.PhoneNumberSort" asp-route-currentFilter="@Model.CurrentFilter">
+                            @Html.DisplayNameFor(m => m.ApplicationUserList[0].PhoneNumber)
+                        </a>
+                    </th>
+                    <th>
+                        <a asp-for=".Index" asp-route-sortOrder="@Model.EmailSort" asp-route-currentFilter="@Model.CurrentFilter">
+                            @Html.DisplayNameFor(m => m.ApplicationUserList[0].Email)
+                        </a>
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (var item in Model.ApplicationUserList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(m => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.PhoneNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.Email)
+                        </td>
+                        <td>
+                            <button class="btn btn-success">
+                                <a asp-page="./Edit" asp-route-id="@item.Id">
+                                    <i class="fas fa-edit text-white"></i>
+
+                                </a>
+                            </button>
+                            <button class="btn btn-danger">
+                                <a asp-page="Delete" asp-route-id="@item.Id">
+                                    <i class="fas fa-trash text-white"></i>
+                                </a>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+
+        @{
+            var prevDisabled = !Model.ApplicationUserList.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.ApplicationUserList.HasNextPage ? "disabled" : "";
+        }
+
+        <div class="col-6">
+            <a asp-page="./Index"
+                asp-route-sortOrder="@Model.CurrentSort"
+                asp-route-pageIndex="@(Model.ApplicationUserList.PageIndex - 1)"
+                asp-route-currentFilter="@Model.CurrentFilter"
+                class="btn btn-primary @prevDisabled">
+                Previous
+            </a>
+            <a asp-page="./Index"
+                asp-route-sortOrder="@Model.CurrentSort"
+                asp-route-pageIndex="@(Model.ApplicationUserList.PageIndex + 1)"
+                asp-route-currentFilter="@Model.CurrentFilter"
+                class="btn btn-primary @nextDisabled">
+                Next
+            </a>
+        </div>
+
+        <div class="col-12">
+            <p class="text-center">Page @Model.ApplicationUserList.PageIndex</p>
+        </div>
+
+</div>
+

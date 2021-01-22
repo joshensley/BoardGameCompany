@@ -1,0 +1,265 @@
+﻿@page
+@model BoardGameCompany.Pages.CheckOut.IndexModel
+@{
+    ViewData["Title"] = "Check Out";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0 pl-0" style="background-color:white;">
+        <li class="breadcrumb-item"><a style="color:gray;" asp-page="../Index">Home</a></li>
+        <li class="breadcrumb-item"><a style="color:gray;" asp-page="/UserCartList/Index">Your Cart</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Check Out</li>
+    </ol>
+</nav>
+
+<br />
+<div class="accordion" id="accordionCheckout">
+
+    @*Address Information*@
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="shippingInfo">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Address Information
+            </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="shippingInfo" data-bs-parent="#accordionCheckout">
+            <div class="accordion-body">
+
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 offset-lg-2 col-lg-4 mb-2 mb-sm-2 mb-md-2">
+                        @if (@Model.UserShippingInformation != null)
+                        {
+                            <h5>Shipping Information</h5>
+                            <p>
+                                @Model.UserShippingInformation.Name <br>
+                                @Model.UserShippingInformation.Address1 <br>
+                                @if (Model.UserShippingInformation.Address2 != null)
+                                {
+                                    @Model.UserShippingInformation.Address2 <br />
+                                }
+                                @Model.UserShippingInformation.City, @Model.UserShippingInformation.State @Model.UserShippingInformation.PostalCode <br/> 
+                                @Model.UserShippingInformation.Country <br/>
+
+                            </p>
+                            <a asp-page="./EditShippingInformation" class="btn btn-primary form-control">
+                                Edit Shipping Info
+                            </a>
+
+                        }
+                        else
+                        {
+                            <a asp-page="./CreateShippingInformation" class="btn btn-primary form-control">
+                                Create Shipping Info
+                            </a>
+                        }
+
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-4">
+                        @if (@Model.UserBillingInformation != null)
+                        {
+                            <h5>Billing Information</h5>
+                            <p>
+                                @Model.UserBillingInformation.Name <br>
+                                @Model.UserBillingInformation.Address1 <br>
+                                @if (Model.UserBillingInformation.Address2 != null)
+                                {
+                                    @Model.UserBillingInformation.Address2 <br />
+                                }
+                                @Model.UserBillingInformation.City, @Model.UserBillingInformation.State @Model.UserBillingInformation.PostalCode <br/> 
+                                @Model.UserBillingInformation.Country <br/>
+
+                            </p>
+                            <a asp-page="./EditBillingInformation" class="btn btn-primary form-control">
+                                Edit Billing Info
+                            </a>
+
+                        }
+                        else
+                        {
+                            <a asp-page="./CreateBillingInformation" class="btn btn-primary form-control">
+                                Create Billing Info
+                            </a>
+                        }
+                    </div>
+                </div>
+
+               
+
+            </div>
+        </div>
+    </div>
+
+    @*Payment Information*@
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="paymentInfo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Payment Information
+            </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="paymentInfo" data-bs-parent="#accordionCheckout">
+            <div class="accordion-body">
+                <div class="row">
+                    <div class="offset-md-3 col-md-6 mb-3">
+                        <label for="cc-name">Name on card</label>
+                        <input type="text" class="form-control" id="cc-name" placeholder="" required>
+                        <small class="text-muted">Full name as displayed on card</small>
+                        <div class="invalid-feedback">
+                            Name on card is required
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="offset-md-3 col-md-6 mb-3">
+                        <label for="cc-number">Credit card number</label>
+                        <input type="text" class="form-control" id="cc-number" placeholder="" required>
+                        <div class="invalid-feedback">
+                            Credit card number is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="offset-md-3 col-md-3 mb-3">
+                        <label for="cc-expiration">Expiration</label>
+                        <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+                        <div class="invalid-feedback">
+                            Expiration date required
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="cc-cvv">CVV</label>
+                        <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+                        <div class="invalid-feedback">
+                            Security code required
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @*Purchase*@
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="totalPayment">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Purchase
+            </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="totalPayment" data-bs-parent="#accordionCheckout">
+            <div class="accordion-body">
+
+                @if (Model.UserCartList.Count > 0)
+                {
+                    <br />
+                    <form method="post">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Cart Items</th>
+                                    <th scope="col" class="text-center">@Html.DisplayNameFor(m => m.UserCartList[0].BoardGame.Price)</th>
+                                    <th scope="col" class="text-center">@Html.DisplayNameFor(m => m.UserCartList[0].Quantity)</th>
+                                    <th scope="col" class="text-center">@Html.DisplayNameFor(m => m.UserCartList[0].TotalPrice)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model.UserCartList)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    <img src="@item.BoardGame.BoardGameImageFilePath" alt="board game" width="50" />
+                                                </div>
+                                                <div class="col-9">
+                                                    <div class="row">
+                                                        @Html.DisplayFor(m => item.BoardGame.Brand.BrandName)
+                                                    </div>
+                                                    <div class="row">
+                                                        @Html.DisplayFor(m => item.BoardGame.Title)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            $@Html.DisplayFor(m => item.BoardGame.Price)
+                                        </td>
+                                        <td class="text-center">
+                                            @Html.DisplayFor(m => item.Quantity)
+                                        </td>
+                                        <td class="text-center">
+                                            $@Html.DisplayFor(m => item.TotalPrice)
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="row">
+                                            <input type="hidden" asp-for="UserOrderInformationPrice.Subtotal" value="@Model.SubTotal" class="form-control" />
+                                            <div class="col-6"><strong>Subtotal:</strong></div>
+                                            <div class="col-6 text-right">$@Model.SubTotal</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="row">
+                                            <input type="hidden" asp-for="UserOrderInformationPrice.Shipping" value="@Model.Shipping" class="form-control" />
+                                            <div class="col-6"><strong>Shipping:</strong></div>
+                                            <div class="col-6 text-right">
+                                                @if (Model.UserShippingInformation != null)
+                                                {
+                                                    <div>$@Model.Shipping</div>
+                                                }
+                                                else
+                                                {
+                                                    <div>Enter shipping information</div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="row">
+                                            <input type="hidden" asp-for="UserOrderInformationPrice.Tax" value="@Model.Tax" class="form-control" />
+                                            <div class="col-6"><strong>Tax:</strong></div>
+                                            <div class="col-6 text-right">$@Model.Tax</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="row">
+                                            <input type="hidden" asp-for="UserOrderInformationPrice.GrandTotal" value="@Model.GrandTotal" class="form-control" />
+                                            <div class="col-6"><strong>Grand total:</strong></div>
+                                            <div class="col-6 text-right"><strong>$@Model.GrandTotal</strong></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row">
+                            <div class="col text-right">
+                                <input type="submit" value="PURCHASE" class="btn btn-primary" />
+                            </div>
+                        </div>
+
+                    </form>
+
+                }
+                else
+                {
+                    <p>No items in your cart</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

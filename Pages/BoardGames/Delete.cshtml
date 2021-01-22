@@ -1,0 +1,57 @@
+﻿@page "{id}"
+@model BoardGameCompany.Pages.BoardGames.DeleteModel
+@{
+    ViewData["Title"] = "Delete Board Game";
+}
+
+<br />
+<div class="container row p-0 m-0">
+    <div class="col-9">
+        <h2 class="text-info">Delete Board Game</h2>
+    </div>
+</div>
+<br />
+<p class="text-danger">@Model.ErrorMessage</p>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.BoardGame.UPC)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BoardGame.UPC)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.BoardGame.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BoardGame.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.BoardGame.ReleaseDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BoardGame.ReleaseDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.BoardGame.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BoardGame.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.BoardGame.PlayerNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BoardGame.PlayerNumber)
+        </dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="BoardGame.ID" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

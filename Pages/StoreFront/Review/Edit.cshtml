@@ -1,0 +1,92 @@
+﻿@page "{boardGameId}/{commentId}/{userId}"
+@model BoardGameCompany.Pages.StoreFront.Review.EditModel
+@{
+    ViewData["Title"] = "Edit Review";
+}
+
+<br />
+<div class="container row p-0 m-0">
+    <div class="col-9">
+        <h2 class="text-info">Edit Review</h2>
+    </div>
+</div>
+<br />
+
+<div class="border container" style="padding:30px;">
+
+    <div class="row mb-4">
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-12">
+            <div class="text-center">
+                <img src="@Model.BoardGame.BoardGameImageFilePath"
+                     alt="@Model.BoardGame.Title"
+                     height="150" />
+            </div>
+        </div>
+        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-xs-12">
+            <dl class="row">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(m => m.BoardGame.UPC)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(m => m.BoardGame.UPC)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(m => m.BoardGame.Title)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(m => m.BoardGame.Title)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(m => m.BoardGame.ReleaseDate)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(m => m.BoardGame.ReleaseDate)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(m => m.BoardGame.PlayerNumber)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(m => m.BoardGame.PlayerNumber)
+                </dd>
+            </dl>
+        </div>
+    </div>
+   
+
+
+
+    <form method="post">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <input type="hidden" asp-for="UserComment.UserBoardGameCommentDate" value="@DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd"))" />
+        <input type="hidden" asp-for="UserComment.UserIdBoardGameComment" value="@Model.UserComment.UserIdBoardGameComment" />
+        <input type="hidden" asp-for="UserComment.BoardGameID" value="@Model.UserComment.BoardGameID" />
+        <div class="form-group row">
+            <div class="col-2">
+                <label>Review</label>
+            </div>
+            <div class="col-10">
+                <textarea asp-for="UserComment.UserBoardGameComment"
+                          id="reviewBoardGame"
+                          rows="6"
+                          class="form-control">
+                </textarea>
+                <div class="invalid-feedback" style="display:block;">
+                    <span asp-validation-for="UserComment.UserBoardGameComment" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-5 offset-2">
+                <input type="submit" value="Edit" class="btn btn-primary form-control" />
+            </div>
+            <div class="col-5">
+                <a asp-page="../Index" asp-route-id="@Model.UserComment.BoardGameID" class="btn btn-success form-control">Back</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <link href="~/css/details.css" rel="stylesheet" type="text/css" />
+    <partial name="_ValidationScriptsPartial" />
+}

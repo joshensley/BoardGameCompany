@@ -1,0 +1,199 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+
+<section class="text-center">
+    <div class="container">
+        <img src="/images/BoardGameCompanyLogo.JPG" style="width: 100%; height: auto; object-fit: cover;" alt="board game" />
+        <form asp-page="./Index" method="get">
+            <div class="form-action no-color">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-sm-12 col-xs-12">
+                        <input type="text" name="SearchString" value="@Model.CurrentFilter" class="form-control form-control-lg text-center" />
+                    </div>
+                </div>
+                <br />
+                <div class="row justify-content-center">
+                    <div class="col-4 col-sm-4 col-xs-4">
+                        <button type="submit" class="btn btn-primary btn-block form-control">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+
+                    <div class="col-4 col-sm-4 col-xs-4">
+                        <a asp-page="./Index"
+                           asp-route-searchString="@Model.CurrentFilter"
+                           asp-route-sortOrder="@Model.TitleSort"
+                           class="btn btn-warning btn-block form-control">
+                            @if (Model.TitleSort == "title_asc")
+                            {
+                                <i class="fas fa-sort-alpha-down-alt"></i>
+                            }
+                            else if (Model.TitleSort == "title_desc")
+                            {
+                                <i class="fas fa-sort-alpha-up"></i>
+                            }
+                            else
+                            {
+                                <i class="fas fa-sort-alpha-down-alt"></i>
+                            }
+                        </a>
+                    </div>
+
+                    <div class="col-4 col-sm-4 col-xs-4">
+                        <a asp-page="./Index" class="btn btn-danger btn-block form-control">
+                            <i class="fas fa-redo-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+@if (Model.BoardGames.Count > 0)
+{
+    <div class="album py-5">
+        <div class="row justify-content-center">
+
+            @foreach (var item in Model.BoardGames)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+
+                        <a asp-page="StoreFront/Index" asp-route-id="@item.ID">
+                            <img src="@item.BoardGameImageFilePath"
+                                 class="card-img-top p-2"
+                                 style="width: 100%; height: 250px; object-fit: cover;"
+                                 alt="@item.Title" />
+                        </a>
+                        <div class="card-body">
+                            <a asp-page="StoreFront/Index" asp-route-id="@item.ID">
+                                <h6 class="card-title">@item.Title</h6>
+                            </a>
+                            <h6 class="text-muted">$@item.Price</h6>
+                            <br />
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+
+                                        bool foundInUserCart = false;
+                                        bool outOfStock = false;
+
+                                        // Out of Stock
+                                        if (item.InventoryItems.Count == 0)
+                                        {
+                                            <a href="#" class="btn btn-block btn-danger disabled"><i class="fas fa-times-circle"></i> No Stock</a>
+                                            outOfStock = true;
+                                        }
+
+                                        // "In Cart"
+                                        if (Model.UserCartList.Count > 0 && outOfStock == false)
+                                        {
+                                            foreach (var userItem in Model.UserCartList)
+                                            {
+
+                                                if (userItem.BoardGameID == item.ID)
+                                                {
+                                                    <a asp-page="/UserCartList/Index" class="btn btn-block btn-success"><i class="fas fa-check"></i> In Cart</a>
+                                                    foundInUserCart = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        // Add to Cart
+                                        if (foundInUserCart == false && outOfStock == false)
+                                        {
+                                            <form method="post" enctype="multipart/form-data">
+                                                <input type="hidden" asp-for="UserCart.BoardGameID" value="@item.ID" />
+                                                <input type="hidden" asp-for="UserCart.Quantity" value="@(1)" />
+                                                <input type="hidden" asp-for="UserCart.TotalPrice" value="@item.Price" />
+                                                <input type="hidden" asp-for="UserCart.ApplicationUserId" value="@Model.UserId" />
+                                                <input type="submit" value="Add to Cart" class="btn btn-block btn-primary form-control" />
+                                            </form>
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        // Add to Cart Disabled
+                                        <a href="#" class="btn btn-block btn-primary disabled">Add to Cart</a>
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+}
+
+
+@{
+    var prevDisabled = !Model.BoardGames.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.BoardGames.HasNextPage ? "disabled" : "";
+}
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <li class="page-item @prevDisabled">
+            <a class="page-link"
+                asp-page="./Index"
+                asp-route-sortOrder="@Model.CurrentSort"
+                asp-route-currentFilter="@Model.CurrentFilter"
+                asp-route-pageIndex="@(1)">
+                <i class="fas fa-angle-double-left"></i>
+            </a>
+        </li>
+        <li class="page-item @prevDisabled">
+            <a class="page-link"
+                asp-page="./Index"
+                asp-route-sortOrder="@Model.CurrentSort"
+                asp-route-currentFilter="@Model.CurrentFilter"
+                asp-route-pageIndex="@(Model.BoardGames.PageIndex - 1)">
+                <i class="fas fa-angle-left"></i>
+            </a>
+        </li>
+
+        @foreach (var pageNumber in Model.PageNumberList)
+        {
+            <li class="page-item @(pageNumber == Model.BoardGames.PageIndex ? "active" : "")">
+                <a class="page-link"
+                    asp-page="./Index"
+                    asp-route-sortOrder="@Model.CurrentSort"
+                    asp-route-currentFilter="@Model.CurrentFilter"
+                    asp-route-pageIndex="@pageNumber">
+                    <strong>@pageNumber</strong>
+                </a>
+            </li>
+        }
+
+        <li class="page-item @nextDisabled">
+            <a class="page-link"
+                asp-page="./Index"
+                asp-route-sortOrder="@Model.CurrentSort"
+                asp-route-currentFilter="@Model.CurrentFilter"
+                asp-route-pageIndex="@(Model.BoardGames.PageIndex + 1)">
+                <i class="fas fa-angle-right"></i>
+            </a>
+        </li>
+        <li class="page-item @nextDisabled">
+            <a class="page-link"
+                asp-page="./Index"
+                asp-route-sortOrder="@Model.CurrentSort"
+                asp-route-currentFilter="@Model.CurrentFilter"
+                asp-route-pageIndex="@Model.BoardGames.TotalPages">
+                <i class="fas fa-angle-double-right"></i>
+            </a>
+        </li>
+    </ul>
+</nav>
