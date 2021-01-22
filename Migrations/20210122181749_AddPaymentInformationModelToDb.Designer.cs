@@ -4,14 +4,16 @@ using BoardGameCompany.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BoardGameCompany.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210122181749_AddPaymentInformationModelToDb")]
+    partial class AddPaymentInformationModelToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,37 +109,6 @@ namespace BoardGameCompany.Migrations
                     b.HasIndex("BoardGameID");
 
                     b.ToTable("InventoryItem");
-                });
-
-            modelBuilder.Entity("BoardGameCompany.Models.PaymentInformation", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("CVV")
-                        .IsRequired()
-                        .HasMaxLength(4)
-                        .HasColumnType("nvarchar(4)");
-
-                    b.Property<string>("CreditCardNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ExpirationMonth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExpirationYear")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NameOnCard")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("PaymentInformation");
                 });
 
             modelBuilder.Entity("BoardGameCompany.Models.UserBillingInformation", b =>

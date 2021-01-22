@@ -20,17 +20,18 @@ namespace BoardGameCompany.Models
         public string CreditCardNumber { get; set; }
 
         [Required]
-        [DisplayFormat(DataFormatString = "", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MM}", ApplyFormatInEditMode = true)]
         [Display(Name = "Expiration Month")]
         public DateTime ExpirationMonth { get; set; }
 
         [Required]
-        [DisplayFormat(DataFormatString = "", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "0:yy", ApplyFormatInEditMode = true)]
         [Display(Name = "Expiration Year")]
         public DateTime ExpirationYear { get; set; }
 
         [Required]
         [Display(Name = "CVV")]
+        [StringLength(4, MinimumLength = 3)]
         public string CVV { get; set; }
     }
 }

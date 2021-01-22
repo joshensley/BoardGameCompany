@@ -26,7 +26,8 @@ namespace BoardGameCompany.Data
         public DbSet<UserBillingInformation> UserBillingInformation { get; set; }
         public DbSet<UserOrderInformation> UserOrderInformation { get; set; }
         public DbSet<UserOrderInformationPrice> UserOrderInformationPrice { get; set; }
-        
+        public DbSet<PaymentInformation> PaymentInformation { get; set; }
+
         /*protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BoardGame>()
